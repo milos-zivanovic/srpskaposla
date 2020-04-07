@@ -1,1 +1,1 @@
-web: gunicorn django_starter.wsgi
+web: gunicorn srpskaposla.wsgi
