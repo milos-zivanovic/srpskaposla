@@ -1,0 +1,18 @@
+<script type="text/javascript">
+    jQuery(function() {
+        let searches = "{{ searches }}".split(',');
+        $("#search-query").autocomplete({
+            source: function(request, response) {
+                let results = $.ui.autocomplete.filter(searches, request.term);
+                response(results.slice(0, 10));
+            },
+            select: function(event, ui) {
+                if(ui.item) {
+                    $('#search-query').val(ui.item.value);
+                }
+                $('#search-form').submit();
+            },
+            minLength: 2,
+        });
+    });
+</script>

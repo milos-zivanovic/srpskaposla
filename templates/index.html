@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Title Block -->
+{% block title %}Pretraga aktivnih poslova{% endblock %}
+
+<!-- Main Block -->
+{% block content %}
+<main role="main" id="index-page" class="container">
+    <!-- Logo -->
+    <div id="logo" class="row">
+        <div class="col-12">
+            <a href="{% url 'jobs:index' %}">
+                <img src="{% static 'jobs/images/logo.png' %}" />
+            </a>
+        </div>
+    </div>
+
+    <!-- Search Form -->
+    <div class="row">
+        <div class="col-12">
+            <div class="input-group">
+                <form id="search-form" action="{% url 'jobs:results' %}" method="get" autocomplete="off">
+                    <input type="hidden" name="sf" value="1" />
+                    <input type="text" name="q" id="search-query" class="form-control" placeholder="Pretraga" />
+                    <span class="input-group-btn">
+                        <button type="button" disabled>
+                            <span class="fa fa-search"></span>
+                        </button>
+                    </span>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{# Search Input Autocomplete #}
+{% block script %}
+    {% include 'autocomplete_script.html' %}
+{% endblock %}
+

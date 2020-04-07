@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Title Block -->
+{% block title %}Rezultati pretrage{% endblock %}
+
+{% block content %}
+<main role="main" id="results-page" class="container bootstrap snippet">
+    <!-- Logo above Search Form for smaller screens -->
+    <div class="row">
+        <div id="logo-small" class="col-lg-12 d-xl-none">
+            <a href="{% url 'jobs:index' %}">
+                <img src="{% static 'jobs/images/logo.png' %}" style="width: 18%; margin-bottom: 3%;" />
+            </a>
+        </div>
+    </div>
+
+    <!-- Search Form  with Logo on the right side for large screens-->
+    <div class="row">
+        <div class="col-xl-11 col-lg-12">
+            <div class="input-group">
+                <form id="search-form" action="{% url 'jobs:results' %}" method="get" autocomplete="off">
+                    <input type="hidden" name="sf" value="1" />
+                    <input type="text" name="q" value="{{ search }}" id="search-query" class="form-control" placeholder="Pretraga" />
+                    <span class="input-group-btn">
+                        <button type="button" disabled>
+                            <span class="fa fa-search"></span>
+                        </button>
+                    </span>
+                </form>
+            </div>
+        </div>
+        <div id="logo-small" class="col-xl-1 d-none d-xl-block">
+            <a href="{% url 'jobs:index' %}">
+                <img src="{% static 'jobs/images/logo.png' %}" />
+            </a>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div id="search-results" class="row">
+        <div class="col-12">
+            <small>{{ jobs.paginator.count }} rezultata ({{ time }} sekunde/i)</small>
+
+            <!-- Job Posts -->
+            {% for job in jobs %}
+            <div class="hr-line-dashed"></div>
+            <div class="search-result">
+                <!-- Source Image, Job Title and URL -->
+                <h4>
+                    <a href="{{ job.source.url }}" target="_blank" style="text-decoration: none;">
+                        <img src="{{ job.source.image.url }}" style="margin-bottom: 3px" title="Izvor: {{ job.source.name }}" />
+                    </a>
+                    <a href="{% url 'jobs:redirect' job.id %}" target="_blank">{{ job.title }}</a>
+                </h4>
+
+                <!-- Company -->
+                {{ job.company.name }}
+
+                <!-- Description -->
+                {% ifnotequal job.desc '' %}
+                    <p>{{ job.desc }}</p>
+                {% else %}
+                    <p>Više možete pročitati <a href="{% url 'jobs:redirect' job.id %}" target="_blank">ovde</a>.</p>
+                {% endifnotequal %}
+
+                <!-- Tech Stack -->
+                {% ifnotequal job.tech '' %}
+                    <div class="tech-stack">
+                    {% for tech in job.tech_list %}
+                        <span>{{ tech|upper }}</span>
+                    {% endfor %}
+                    </div>
+                {% endifnotequal %}
+
+                <!-- Views and Source -->
+                {% ifnotequal job.count 0 %}
+                    <small>Pregleda: {{ job.count }}</small>
+                {% endifnotequal %}
+            </div>
+            {% endfor %}
+
+            <div class="hr-line-dashed"></div>
+        </div>
+    </div>
+
+    <!-- Related Searches -->
+    {% if related_searches %}
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Srodne pretrage</h5>
+            </div>
+        </div>
+        <div id="related-searches" class="row text-center">
+        {% for search in related_searches %}
+            <div class="col-md-2">
+                <form action="{% url 'jobs:results' %}" method="get" autocomplete="off">
+                    <input type="hidden" name="sf" value="1" />
+                    <input type="hidden" name="q" value="{{ search.term }}" />
+                    <input type="submit" class="link" value="{{ search.term }}">
+                </form>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Pagination -->
+    {% if jobs.has_other_pages %}
+        <div id="pagination" class="row text-center">
+            <div class="col-md-12">
+                <div class="btn-group">
+                    <!-- Previous Links -->
+                    {% if jobs.has_previous %}
+                        <a href="?q={{ search }}&p=1">1</a>
+                        <a href="?q={{ search }}&p={{ jobs.previous_page_number }}">&laquo;</a>
+                    {% endif %}
+
+                    <!-- Current Page -->
+                    <span>{{ jobs.number }}</span>
+
+                    <!-- Next Links -->
+                    {% if jobs.has_next %}
+                        <a href="?q={{ search }}&p={{ jobs.next_page_number }}">&raquo;</a>
+                        <a href="?q={{ search }}&p={{ jobs.paginator.num_pages }}">{{ jobs.paginator.num_pages }}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</main>
+{% endblock %}
+
+{# Search Input Autocomplete #}
+{% block script %}
+    {% include 'autocomplete_script.html' %}
+{% endblock %}

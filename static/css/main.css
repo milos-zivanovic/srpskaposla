@@ -1,0 +1,131 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+/* General Styles */
+
+a,
+input.link {
+    color: #5487C9;
+}
+
+a:hover, a:active, a:after,
+input.link:hover, input.link:active, input.link:after{
+    color: #2c558c;
+}
+
+/* Index Page */
+
+main#index-page {
+    padding-top: 5%;
+    text-align: center;
+}
+
+#search-form {
+    width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+#logo img {
+    width: 25%;
+    height: auto;
+    margin: 3%;
+}
+
+
+#search-query {
+    width:100%;
+    padding-right: 3px;
+    padding-left: 15px;
+    /* IE7-8 doesn't have border-radius, so don't indent the padding */
+    margin-bottom: 0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 0;
+}
+
+#search-form button {
+    border: 0;
+    background: none;
+    margin: 5px 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    color: #F68712;
+    cursor: unset;
+}
+
+/* Results Page */
+
+main#results-page {
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+
+#logo-small {
+    text-align: center;
+}
+
+#logo-small img {
+    width: 90%;
+    height: auto;
+}
+
+#results-page small {
+    color: #70757a;
+}
+
+.search-result p {
+    font-size: 14px;
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
+}
+
+.hr-line-dashed {
+    border-top: 1px dashed #E7EAEC;
+    color: #ffffff;
+    background-color: #ffffff;
+    height: 1px;
+    margin: 25px 0;
+}
+
+#pagination a, #pagination span {
+    padding: 8px;
+    border: 1px solid transparent;
+    background-color: buttonface;
+}
+
+.search-result small {
+    font-size: 12px;
+    margin-top: 10px;
+    display: block;
+}
+
+div.tech-stack span {
+    color: #3e6d8e;
+    background-color: #e0eaf1;
+    margin: 0 2px 2px 0;
+    padding: 3px 5px;
+    text-decoration: none;
+    font-size: 11px;
+    line-height: 1.33;
+    display: inline-block;
+}
+
+#related-searches {
+    margin: 5px 0 50px 0;
+}
+
+input.link {
+    border: none;
+    background: inherit;
+}
+
+input.link:hover, input.link:active, input.link:after {
+    cursor: pointer;
+    text-decoration: underline;
+}
