@@ -12,28 +12,28 @@ def execute(apps, schema_editor):
         name='Startit',
         url='https://startit.rs',
         first_page='/poslovi/',
-        image='jobs/images/startit.png',
+        image='startit.png',
         is_active=True
     )
     Source.objects.create(
         name='Helloworld',
         url='https://www.helloworld.rs',
         first_page='/oglasi-za-posao/',
-        image='jobs/images/helloworld.png',
+        image='helloworld.png',
         is_active=True
     )
     Source.objects.create(
         name='Infostud',
         url='https://poslovi.infostud.com',
         first_page='/oglasi-za-posao?category%5B0%5D=5',
-        image='jobs/images/infostud.png',
+        image='infostud.png',
         is_active=True
     )
     Source.objects.create(
         name='Jooble',
         url='https://rs.jooble.org',
         first_page='/posao-it/Srbija?p=1',
-        image='jobs/images/jooble.png',
+        image='jooble.png',
         is_active=True
     )
 

@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=100)),
                 ('url', models.CharField(max_length=100)),
                 ('first_page', models.CharField(max_length=100)),
-                ('image', models.ImageField(null=True, upload_to='jobs/images')),
+                ('image', models.ImageField(null=True, upload_to='')),
                 ('is_active', models.BooleanField(default=False)),
             ],
         ),
