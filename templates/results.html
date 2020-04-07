@@ -48,9 +48,10 @@
             <div class="search-result">
                 <!-- Source Image, Job Title and URL -->
                 <h4>
-                    <a href="{{ job.source.url }}" target="_blank" style="text-decoration: none;">
+                    <!-- TODO: implement media files on production -->
+                    <!--<a href="{{ job.source.url }}" target="_blank" style="text-decoration: none;">
                         <img src="{{ job.source.image.url }}" style="margin-bottom: 3px" title="Izvor: {{ job.source.name }}" />
-                    </a>
+                    </a>-->
                     <a href="{% url 'jobs:redirect' job.id %}" target="_blank">{{ job.title }}</a>
                 </h4>
 
