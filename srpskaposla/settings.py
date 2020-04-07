@@ -78,12 +78,17 @@ WSGI_APPLICATION = 'srpskaposla.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ['DB_HOST'],
-        'PORT': os.environ['DB_PORT'],
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASSWORD'],
-        'NAME': os.environ['DB_NAME'],
+        # SQLite
+        "ENGINE" : "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+
+        # PostgreSQL
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'HOST': os.environ['DB_HOST'],
+        # 'PORT': os.environ['DB_PORT'],
+        # 'USER': os.environ['DB_USER'],
+        # 'PASSWORD': os.environ['DB_PASSWORD'],
+        # 'NAME': os.environ['DB_NAME'],
     }
 }
 
