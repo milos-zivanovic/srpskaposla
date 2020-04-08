@@ -30,6 +30,7 @@ class Job(models.Model):
     desc = models.TextField()
     url = models.CharField(max_length=255)
     tech = models.TextField()
+    start_count = models.IntegerField(default=0)
     count = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -37,6 +38,11 @@ class Job(models.Model):
     def __str__(self):
         return f'{self.title} @ {self.company}'
 
+    @property
+    def real_count(self):
+        return self.count - self.start_count
+
+    @property
     def tech_list(self):
         return self.tech.split(',') if self.tech else []
 
