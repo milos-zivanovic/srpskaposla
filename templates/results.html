@@ -10,7 +10,7 @@
     <div class="row">
         <div id="logo-small" class="col-lg-12 d-xl-none">
             <a href="{% url 'jobs:index' %}">
-                <img src="{% static 'images/logo.png' %}" style="width: 18%; margin-bottom: 3%;" />
+                <img src="{% static 'logo.png' %}" style="width: 18%; margin-bottom: 3%;" />
             </a>
         </div>
     </div>
@@ -32,7 +32,7 @@
         </div>
         <div id="logo-small" class="col-xl-1 d-none d-xl-block">
             <a href="{% url 'jobs:index' %}">
-                <img src="{% static 'images/logo.png' %}" />
+                <img src="{% static 'logo.png' %}" />
             </a>
         </div>
     </div>
@@ -48,10 +48,9 @@
             <div class="search-result">
                 <!-- Source Image, Job Title and URL -->
                 <h4>
-                    <!-- TODO: implement media files on production -->
-                    <!--<a href="{{ job.source.url }}" target="_blank" style="text-decoration: none;">
-                        <img src="{{ job.source.image.url }}" style="margin-bottom: 3px" title="Izvor: {{ job.source.name }}" />
-                    </a>-->
+                    <a href="{{ job.source.url }}" target="_blank" style="text-decoration: none;">
+                        <img src="{% static job.source.image_name %}" style="margin-bottom: 3px" title="Izvor: {{ job.source.name }}" />
+                    </a>
                     <a href="{% url 'jobs:redirect' job.id %}" target="_blank">{{ job.title }}</a>
                 </h4>
 
