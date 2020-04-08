@@ -8,10 +8,13 @@ from jobs.scrapers import *
 class Command(BaseCommand):
     help = 'Web scraping: get jobs from sources stored in Source table and store them into Job table'
 
-    def handle(self, *args, **options):
+    def add_arguments(self, parser):
+        parser.add_argument('-c', '--cron', type=int, help='Use 0 or 1 to simulate that cron is used')
+
+    def handle(self, *args, **kwargs):
         # Prepare variables
         total_start_time = time()
-        is_cron = 'cron' in options
+        is_cron = True if 'cron' in kwargs and kwargs['cron'] else False
         if is_cron:
             print(f'Cron triggered at: {str(timezone.now())}')
 
