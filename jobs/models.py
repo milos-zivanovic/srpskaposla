@@ -5,7 +5,8 @@ class Source(models.Model):
     name = models.CharField(max_length=100)
     url = models.CharField(max_length=100)
     first_page = models.CharField(max_length=100)
-    image_name = models.CharField(max_length=50, null=True)
+    image_path = models.CharField(max_length=50, null=True)
+    large_image_path = models.CharField(max_length=75, null=True)
     is_active = models.BooleanField(default=False)
 
     def __str__(self):

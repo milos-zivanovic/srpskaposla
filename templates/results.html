@@ -49,7 +49,7 @@
                 <!-- Source Image, Job Title and URL -->
                 <h4>
                     <a href="{{ job.source.url }}" target="_blank" style="text-decoration: none;">
-                        <img src="{% static job.source.image_name %}" style="margin-bottom: 3px" title="Izvor: {{ job.source.name }}" />
+                        <img src="{% static job.source.image_path %}" style="margin-bottom: 3px" title="Izvor: {{ job.source.name }}" />
                     </a>
                     <a href="{% url 'jobs:redirect' job.id %}" target="_blank">{{ job.title }}</a>
                 </h4>

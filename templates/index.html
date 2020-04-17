@@ -32,6 +32,28 @@
             </div>
         </div>
     </div>
+
+    <!-- Description -->
+    <div id="desc" class="row">
+        <div class="col-12">
+            <span>Želite posao u IT industriji?</span><br/>
+            <span>Pretražite <b>{{ jobs_count }}</b> aktivnih IT poslova na našem sajtu i pronađite sebi posao iz snova.</span>
+        </div>
+    </div>
+
+    <!-- Sources -->
+    <div id="sources" class="row">
+        <div class="col-12">
+            <span>Izvori:</span>
+            <div id="sources-wrapper">
+                {% for s in sources %}
+                    <a href="{{ s.url }}" target="_blank" style="text-decoration: none;">
+                        <img src="{% static s.large_image_path %}" style="margin-bottom: 3px" title="{{ s.name }}" />
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </main>
 {% endblock %}
 

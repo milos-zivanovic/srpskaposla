@@ -6,12 +6,14 @@ from django.shortcuts import get_object_or_404, render, redirect as redirect_sho
 from .models import Search
 
 
-from .models import Job
+from .models import Job, Source
 
 
 def index(request):
+    sources = Source.objects.filter(is_active=True)
+    jobs_count = Job.objects.all().count()
     searches = ','.join([s.term for s in Search.objects.all().order_by('-count')])
-    return render(request, 'index.html', {'searches': searches})
+    return render(request, 'index.html', {'sources': sources, 'jobs_count': jobs_count, 'searches': searches})
 
 
 def results(request):
