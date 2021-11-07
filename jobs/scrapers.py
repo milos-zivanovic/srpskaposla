@@ -3,22 +3,31 @@ from bs4 import BeautifulSoup
 from jobs.models import Company, Job
 
 
+def debug(message, value, flag):
+    if not flag:
+        return
+    print(f'{message}: {str(value)}')
+
+
 class Scraper:
 
     @classmethod
-    def run(cls, source):
+    def run(cls, source, flag=False):
         # Prepare variables
         url = f'{source.url}{source.first_page}'
+        debug('First page url', url, flag)
 
         # Looping through all pages
         while url:
             # Get HTML from url & create BeautifulSoup object
             response = requests.get(url)
+            debug('Response status code', response.status_code, flag)
             data = response.text
             soup = BeautifulSoup(data, features='html.parser')
 
             # Get all posted jobs
             jobs = cls.get_job_posts(soup)
+            debug('Number of jobs found', len(jobs), flag)
 
             for job in jobs:
                 # Get job data
@@ -40,12 +49,15 @@ class Scraper:
                     existing_job.is_active = True
                     existing_job.save()
                 else:
-                    Job.objects.create(source=source, company=company, title=title, desc=desc, url=job_url, tech=tech)
+                    job = Job.objects.create(source=source, company=company, title=title, desc=desc, url=job_url,
+                                             tech=tech)
+                    debug('Created job id', job.id, flag)
 
             # Get new url
             url = cls.get_next_url(soup, source)
             if url and 'https' not in url:
                 url = source.url + url
+            debug('Next page url', url, flag)
 
     @staticmethod
     def get_job_posts(soup):
