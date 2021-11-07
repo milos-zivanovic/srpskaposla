@@ -10,6 +10,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('-c', '--cron', type=int, help='Use 0 or 1 to simulate that cron is used')
+        parser.add_argument('-d', '--debug', type=int, help='Use 0 or 1 to set detailed debugging')
 
     def handle(self, *args, **kwargs):
         # Prepare variables
@@ -17,6 +18,7 @@ class Command(BaseCommand):
         is_cron = True if 'cron' in kwargs and kwargs['cron'] else False
         if is_cron:
             print(f'Cron triggered at: {str(timezone.now())}')
+        debug = True if 'debug' in kwargs and kwargs['debug'] else False
 
         # Update is_active column to 0
         Job.objects.all().update(is_active=False)
@@ -29,7 +31,7 @@ class Command(BaseCommand):
             scraper_name = f'{source.name}Scraper'
             try:
                 scraper_class = eval(scraper_name)
-                scraper_class.run(source)
+                scraper_class.run(source, debug)
                 diff_time = round(time() - start_time, 1)
                 if not is_cron:
                     print(f'Finished {source.name} ({source.url}) in {diff_time}s')
