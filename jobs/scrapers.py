@@ -76,26 +76,47 @@ class StartitScraper(Scraper):
 
     @staticmethod
     def get_job_posts(soup):
-        premium_jobs = soup.find_all('div', {'class': 'listing-oglas-premium listing-oglas'})
-        standard_jobs = soup.find_all('div', {'class': 'listing-oglas-standard listing-oglas'})
-        mini_jobs = soup.find_all('div', {'class': 'oglas-mini'})
+        premium_jobs = soup.find_all('article', {'class': 'oglas-premium'})
+        standard_jobs = soup.find_all('article', {'class': 'standard-oglas'})
+        mini_jobs = soup.find_all('article', {'class': 'mini-oglas'})
         return premium_jobs + standard_jobs + mini_jobs
 
     @staticmethod
     def get_job_data(job):
-        # Get title, job url, company name and tech
-        main_title = job.find('h1').find('a')
+        # Get title, job_url, company_name, tech_list and desc
+        main_title = job.find('h3').find('a')
         title, job_url = main_title.text.strip(),  main_title.get('href')
-        mini_header = job.find('div', {'class': 'oglas-mini-header'})
-        company_name = mini_header.text if mini_header else job.find('div', {'class': 'listing-ime-firme'}).find('a').text
+        mini_header = job.find('h4').find('a')
+        company_name = mini_header.text.strip()
         company_name = company_name.replace(' → profil kompanije', '')
-        tech_list = [s.find('a').text for s in job.find_all('small')]
-        return title, job_url, company_name, tech_list, ''
+        tech_list = []
+
+        # Premium jobs tech list
+        hidden_div = job.find('div', {'spans-hidden'})
+        hidden_spans = hidden_div.find_all('span')
+        for hidden_span in hidden_spans:
+            tech_list.append(hidden_span.find('a').text.strip())
+        hidden_as = hidden_div.find_all('a')
+        for hidden_a in hidden_as:
+            tech_list.append(hidden_a.find('span').text.strip())
+
+        # Standard jobs tech list
+        div = job.find('div', {'spans'})
+        spans = div.find_all('span')
+        for span in spans:
+            tech_list.append(span.find('a').text.strip())
+
+        # Mini jobs tech list
+        hidden_mini_div = job.find('div', {'spans-m-hidden'})
+        hidden_mini_spans = hidden_mini_div.find_all('span')
+        for hidden_mini_span in hidden_mini_spans:
+            tech_list.append(hidden_mini_span.find('a').text.strip())
+
+        return title, job_url, company_name, list(set(tech_list)), ''
 
     @staticmethod
     def get_next_url(soup, source):
-        more_posts = soup.find('div', {'listing-more-posts'})
-        return more_posts.find('a').get('href') if more_posts else None
+        return None
 
 
 class HelloworldScraper(Scraper):
@@ -106,7 +127,7 @@ class HelloworldScraper(Scraper):
 
     @staticmethod
     def get_job_data(job):
-        # Get title, job url and company name
+        # Get title, job_url, company_name, tech_list and desc
         main_title = job.find('a', {'class': 'job-link'})
         title, job_url = main_title.text, main_title.get('href')
         company_name = ''
@@ -142,7 +163,7 @@ class InfostudScraper(Scraper):
 
     @staticmethod
     def get_job_data(job):
-        # Get title, job url, company name and tech
+        # Get title, job_url, company_name, tech_list and desc
         main_title = job.find('h2').find('a')
         title, job_url = main_title.text, main_title.get('href')
         company_wrapper = job.find('p', {'class': 'uk-h3'})
@@ -167,7 +188,7 @@ class JoobleScraper(Scraper):
 
     @staticmethod
     def get_job_data(job):
-        # Get title, job url and company name
+        # Get title, job_url, company_name, tech_list and desc
         main_title = job.find('a', {'class': 'link-position'})
         title = ' '.join([e.text.strip() for e in main_title.find('h2').findChildren()])
         job_url = main_title.get('href')
