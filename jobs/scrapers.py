@@ -94,12 +94,13 @@ class StartitScraper(Scraper):
 
         # Premium jobs tech list
         hidden_div = job.find('div', {'spans-hidden'})
-        hidden_spans = hidden_div.find_all('span')
-        for hidden_span in hidden_spans:
-            tech_list.append(hidden_span.find('a').text.strip())
-        hidden_as = hidden_div.find_all('a')
-        for hidden_a in hidden_as:
-            tech_list.append(hidden_a.text.strip())
+        if hidden_div is not None:
+            hidden_spans = hidden_div.find_all('span')
+            for hidden_span in hidden_spans:
+                tech_list.append(hidden_span.find('a').text.strip())
+            hidden_as = hidden_div.find_all('a')
+            for hidden_a in hidden_as:
+                tech_list.append(hidden_a.text.strip())
 
         # Standard jobs tech list
         div = job.find('div', {'spans'})
