@@ -42,7 +42,10 @@ def results(request):
         related_searches = Search.objects.filter(term__icontains=search).exclude(term=search).order_by('-count')[:6]
 
         # Filtering
-        job_list = job_list.filter(Q(title__icontains=search) | Q(tech__icontains=search))
+        job_list_1 = Job.objects.filter(title__icontains=search).order_by('-count')  # filtered by title
+        job_list_2 = Job.objects.filter(tech__icontains=search).order_by('-count')  # filtered by tech list
+        job_list = job_list_1 | job_list_2
+        job_list = job_list.distinct()
 
     # Pagination
     page = request.GET.get('p', 1)
