@@ -169,12 +169,10 @@ class InfostudScraper(Scraper):
         # Get title, job_url, company_name, tech_list and desc
         main_title = job.find('h2').find('a')
         title, job_url = main_title.text, main_title.get('href')
-        company_wrapper = job.find('p', {'class': 'uk-h3'})
-        company_name = company_wrapper.find('a').text if company_wrapper.find('a') else company_wrapper.text
-        company_name = company_name.strip()
-        tech_list = [a.text for a in job.find_all('a', {'class': '__jobtag tag-lyt full'})]
-        desc_tag = job.find('p', {'class': 'uk-margin-small-bottom'})
-        desc = desc_tag.text if desc_tag else ''
+        company_name = job.find('p', {'class': 'uk-h4'}).text.strip()
+        tech_list = [span.text.strip() for span in job.find_all('span', {'class': '__jobtag'}) if span.text != '...']
+        desc_tag = job.find('p', {'class': 'job__desc'})
+        desc = desc_tag.text.strip() if desc_tag else ''
         return title, job_url, company_name, tech_list, desc
 
     @staticmethod
