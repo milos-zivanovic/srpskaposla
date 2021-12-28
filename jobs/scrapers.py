@@ -48,7 +48,7 @@ class Scraper:
                 if existing_job:
                     existing_job.is_active = True
                     existing_job.save()
-                    debug('Reactivated job id', job.id, flag)
+                    debug('Reactivated job id', existing_job.id, flag)
                 else:
                     job = Job.objects.create(source=source, company=company, title=title, desc=desc, url=job_url,
                                              tech=tech)
