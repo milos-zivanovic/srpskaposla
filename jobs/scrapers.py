@@ -103,15 +103,17 @@ class StartitScraper(Scraper):
 
         # Standard jobs tech list
         div = job.find('div', {'spans'})
-        spans = div.find_all('span')
-        for span in spans:
-            tech_list.append(span.find('a').text.strip())
+        if div is not None:
+            spans = div.find_all('span')
+            for span in spans:
+                tech_list.append(span.find('a').text.strip())
 
         # Mini jobs tech list
         hidden_mini_div = job.find('div', {'spans-m-hidden'})
-        hidden_mini_spans = hidden_mini_div.find_all('span')
-        for hidden_mini_span in hidden_mini_spans:
-            tech_list.append(hidden_mini_span.find('a').text.strip())
+        if hidden_mini_div is not None:
+            hidden_mini_spans = hidden_mini_div.find_all('span')
+            for hidden_mini_span in hidden_mini_spans:
+                tech_list.append(hidden_mini_span.find('a').text.strip())
 
         return title, job_url, company_name, list(set(tech_list)), ''
 
