@@ -31,7 +31,7 @@ class Scraper:
 
             for job in jobs:
                 # Get job data
-                title, job_url, company_name, tech_list, desc = cls.get_job_data(job)
+                title, job_url, company_name, tech_list, desc = cls.get_job_data(job, flag)
 
                 # Prepare title, job_url, company and tech
                 title = title.strip()
@@ -64,7 +64,7 @@ class Scraper:
         raise NotImplementedError("Must override get_job_posts")
 
     @staticmethod
-    def get_job_data(job):
+    def get_job_data(job, flag):
         raise NotImplementedError("Must override get_job_data")
 
     @staticmethod
@@ -82,11 +82,15 @@ class StartitScraper(Scraper):
         return premium_jobs + standard_jobs + mini_jobs
 
     @staticmethod
-    def get_job_data(job):
+    def get_job_data(job, flag):
         # Get title, job_url, company_name, tech_list and desc
         main_title = job.find('h3').find('a')
+        if main_title is None:
+            debug('main_title: ', str(main_title), flag)
         title, job_url = main_title.text.strip(),  main_title.get('href')
         mini_header = job.find('h4').find('a')
+        if mini_header is None:
+            debug('mini_header: ', str(mini_header), flag)
         company_name = mini_header.text.strip()
         company_name = company_name.replace(' → profil kompanije', '')
         tech_list = []
@@ -95,21 +99,29 @@ class StartitScraper(Scraper):
         hidden_div = job.find('div', {'spans-hidden'})
         hidden_spans = hidden_div.find_all('span')
         for hidden_span in hidden_spans:
+            if hidden_span.find('a') is None:
+                debug("hidden_span.find('a'): ", str(hidden_span.find('a')), flag)
             tech_list.append(hidden_span.find('a').text.strip())
         hidden_as = hidden_div.find_all('a')
         for hidden_a in hidden_as:
+            if hidden_a.find('span') is None:
+                debug("hidden_a.find('span'): ", str(hidden_a.find('span')), flag)
             tech_list.append(hidden_a.find('span').text.strip())
 
         # Standard jobs tech list
         div = job.find('div', {'spans'})
         spans = div.find_all('span')
         for span in spans:
+            if span.find('a') is None:
+                debug("span.find('a'):", str(span.find('a')), flag)
             tech_list.append(span.find('a').text.strip())
 
         # Mini jobs tech list
         hidden_mini_div = job.find('div', {'spans-m-hidden'})
         hidden_mini_spans = hidden_mini_div.find_all('span')
         for hidden_mini_span in hidden_mini_spans:
+            if hidden_mini_span.find('a') is None:
+                debug("hidden_mini_span.find('a'): ", str(hidden_mini_span.find('a')), flag)
             tech_list.append(hidden_mini_span.find('a').text.strip())
 
         return title, job_url, company_name, list(set(tech_list)), ''
@@ -126,7 +138,7 @@ class HelloworldScraper(Scraper):
         return soup.find_all('div', {'class': 'job-item'})
 
     @staticmethod
-    def get_job_data(job):
+    def get_job_data(job, flag):
         # Get title, job_url, company_name, tech_list and desc
         main_title = job.find('a', {'class': 'job-link'})
         title, job_url = main_title.text, main_title.get('href')
@@ -162,7 +174,7 @@ class InfostudScraper(Scraper):
         return soup.select('div[id*="oglas_"]')
 
     @staticmethod
-    def get_job_data(job):
+    def get_job_data(job, flag):
         # Get title, job_url, company_name, tech_list and desc
         main_title = job.find('h2').find('a')
         title, job_url = main_title.text, main_title.get('href')
@@ -187,7 +199,7 @@ class JoobleScraper(Scraper):
         return soup.find_all('div', {'class': 'vacancy_wrapper'})
 
     @staticmethod
-    def get_job_data(job):
+    def get_job_data(job, flag):
         # Get title, job_url, company_name, tech_list and desc
         main_title = job.find('a', {'class': 'link-position'})
         title = ' '.join([e.text.strip() for e in main_title.find('h2').findChildren()])
