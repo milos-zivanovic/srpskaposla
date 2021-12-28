@@ -133,23 +133,21 @@ class HelloworldScraper(Scraper):
     @staticmethod
     def get_job_data(job, flag):
         # Get title, job_url, company_name, tech_list and desc
-        main_title = job.find('a', {'class': 'job-link'})
+        main_title = job.find('h3').find('a')
         title, job_url = main_title.text, main_title.get('href')
-        company_name = ''
-        employer = job.find('strong', {'class': '-employer'})
-        if employer:
-            company_name = employer.find('a').text if employer.find('a') else employer.text
-            company_name = company_name.strip()
+        company_name = job.find('h4').find('a').text.strip()
 
         # Get tech
         tech_list = []
-        job_tags = job.find('div', {'class': 'jobtags'})
-        if job_tags:
-            for a in job_tags.find_all('a'):
-                tech_list.append(a.find('div').text.strip())
+        job_wrapper = job.find('div', {'class': 'flex items-center gap-2 flex-wrap'})
+        if job_wrapper:
+            for a in job_wrapper.find_all('a'):
+                tech_list.append(a.find('span').text.strip())
+            for button in job_wrapper.find_all('button'):
+                tech_list.append(button.find('span').text.strip())
 
         # Get desc
-        desc_link = job.find('a', {'class': 'text-link'})
+        desc_link = job.find('p', {'class': 'text-sm opacity-90'})
         desc = desc_link.text if desc_link else ''
 
         return title, job_url, company_name, tech_list, desc
