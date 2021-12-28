@@ -127,7 +127,8 @@ class HelloworldScraper(Scraper):
 
     @staticmethod
     def get_job_posts(soup):
-        return soup.find_all('div', {'class': 'job-item'})
+        return soup.find('div', {'class': '__search-results'}).find_all('div', {
+            'class': 'relative bg-white shadow-md rounded-md'})
 
     @staticmethod
     def get_job_data(job, flag):
