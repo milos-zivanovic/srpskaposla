@@ -42,10 +42,14 @@ def results(request):
         related_searches = Search.objects.filter(term__icontains=search).exclude(term=search).order_by('-count')[:6]
 
         # Filtering
-        job_list_1 = Job.objects.filter(title__icontains=search).order_by('-count')  # filtered by title
-        job_list_2 = Job.objects.filter(tech__icontains=search).order_by('-count')  # filtered by tech list
-        job_list = job_list_1 | job_list_2
-        job_list = job_list.distinct()
+        jobs_dict = {}
+        for job in Job.objects.filter(title__icontains=search).order_by('-count'):
+            if job.id not in jobs_dict:
+                jobs_dict[job.id] = job
+        for job in Job.objects.filter(tech__icontains=search).order_by('-count'):
+            if job.id not in jobs_dict:
+                jobs_dict[job.id] = job
+        job_list = list(jobs_dict.values())
 
     # Pagination
     page = request.GET.get('p', 1)
