@@ -78,8 +78,8 @@ class StartitScraper(Scraper):
     @staticmethod
     def get_job_posts(soup):
         premium_jobs = soup.find_all('article', {'class': 'oglas-premium'})
-        standard_jobs = soup.find_all('article', {'class': 'standard-oglas'})
-        mini_jobs = soup.find_all('article', {'class': 'mini-oglas'})
+        standard_jobs = soup.find_all('article', {'class': 'oglas-standard'})
+        mini_jobs = soup.find_all('article', {'class': 'oglas-mini'})
         return premium_jobs + standard_jobs + mini_jobs
 
     @staticmethod
@@ -127,8 +127,7 @@ class HelloworldScraper(Scraper):
 
     @staticmethod
     def get_job_posts(soup):
-        return soup.find('div', {'class': '__search-results'}).find_all('div', {
-            'class': 'relative bg-white shadow-md rounded-md'})
+        return soup.find('div', {'class': '__search-results'}).find_all('div', {'class': 'overflow-hidden'})
 
     @staticmethod
     def get_job_data(job, flag):
@@ -142,9 +141,9 @@ class HelloworldScraper(Scraper):
         job_wrapper = job.find('div', {'class': 'flex items-center gap-2 flex-wrap'})
         if job_wrapper:
             for a in job_wrapper.find_all('a'):
-                tech_list.append(a.find('span').text.strip())
+                tech_list.append(a.text.strip())
             for button in job_wrapper.find_all('button'):
-                tech_list.append(button.find('span').text.strip())
+                tech_list.append(button.text.strip())
 
         # Get desc
         desc_link = job.find('p', {'class': 'text-sm opacity-90'})
@@ -169,8 +168,8 @@ class InfostudScraper(Scraper):
         # Get title, job_url, company_name, tech_list and desc
         main_title = job.find('h2').find('a')
         title, job_url = main_title.text, main_title.get('href')
-        company_name = job.find('p', {'class': 'uk-h4'}).text.strip()
-        tech_list = [span.text.strip() for span in job.find_all('span', {'class': '__jobtag'}) if span.text != '...']
+        company_name = job.find('p', {'class': 'uk-h5'}).text.strip()
+        tech_list = [span.text.strip() for span in job.find_all('span', {'class': '__jobtag'}) if span.text != '...' and 'preview' not in span.attrs['class']]
         desc_tag = job.find('p', {'class': 'job__desc'})
         desc = desc_tag.text.strip() if desc_tag else ''
         return title, job_url, company_name, tech_list, desc
